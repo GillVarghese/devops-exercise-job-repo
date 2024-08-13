@@ -1,23 +1,21 @@
 pipeline {
-    agent {
-        label 'agent'
-    }
+    agent any
 
     stages {
         stage('Build') {
             steps {
                 checkout scm
-                sh "mvn clean package"
+                sh 'mvn clean install'
             }
         }
         stage('Test') {
             steps {
-                sh "mvn test"
+                sh 'mvn test'
             }
         }
-        stage('Archive'){
+        stage('Archive') {
             steps {
-                archiveArtifacts artifacts: '*.jar', allowEmptyArchive: true
+                archiveArtifacts artifacts: '**/*.jar', allowEmptyArchive: true
             }
         }
     }
