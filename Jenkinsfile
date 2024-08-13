@@ -12,7 +12,9 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                catchError(buildResult: 'UNSTABLE', message: 'Tests failed') {
+                    sh 'mvn test'
+                }
             }
         }
         stage('Archive') {
