@@ -4,10 +4,9 @@ pipeline {
     }
 
     options {
-        // Keep the Jenkins workspace clean and keep the build history
-        cleanWs() 
-        // Retain the build artifacts for a longer time
-        buildDiscarder(logRotator(numToKeepStr: '10')) 
+        // Retain the build artifacts and clean the workspace manually
+        buildDiscarder(logRotator(numToKeepStr: '10')) // Keep 10 builds
+        skipStagesAfterUnstable() // Skip stages after an unstable result
     }
 
     stages {
@@ -42,12 +41,16 @@ pipeline {
         }
     }
 
-    triggers {
-        // Trigger builds for every branch and pull requests
-        pollSCM('* * * * *') // Poll SCM every minute
-        githubPullRequest {
-            triggerPhrase('Jenkins please test this')
-            useGitHubHooks()
+    post {
+        always {
+            // Clean the workspace after the build
+            deleteDir() 
         }
+    }
+
+    triggers {
+        // Example triggers
+        pollSCM('* * * * *') // Poll SCM every minute. Adjust as needed
+        // For GitHub pull requests, use the GitHub Branch Source plugin or configure GitHub Webhooks
     }
 }
