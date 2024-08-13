@@ -7,12 +7,12 @@ pipeline {
         stage('Build') {
             steps {
                 checkout scm
-                sh "mvn build"
+                sh "mvn clean package"
             }
         }
         stage('Test') {
             steps {
-                sh "mvn runTests"
+                sh "mvn test"
             }
         }
         stage('Archive'){
