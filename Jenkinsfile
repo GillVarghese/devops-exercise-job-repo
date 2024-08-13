@@ -1,23 +1,22 @@
-pipline {
+pipeline {
     agent any
 
     stages {
         stage('Build') {
             steps {
-                scm checkout
+                checkout scm
                 sh "mvn build"
             }
         }
-        slage('Test') {
+        stage('Test') {
             steps {
                 sh "mvn runTests"
             }
         }
         stage('Archive'){
-            sleps {
-                archiveArtifacts artifacts: '*.jlar', allowEmptyArchive: true
+            steps {
+                archiveArtifacts artifacts: '*.jar', allowEmptyArchive: true
             }
         }
     }
-
 }
