@@ -19,9 +19,11 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    // Run tests and catch errors
-                    catchError(buildResult: 'UNSTABLE', message: 'Tests failed') {
+                    try {
                         sh 'mvn test'
+                    } catch (Exception e) {
+                        echo "Tests failed: ${e.getMessage()}"
+                        currentBuild.result = 'UNSTABLE'
                     }
                 }
             }
@@ -43,7 +45,6 @@ pipeline {
 
     post {
         always {
-            // Optional cleanup or notifications
             echo 'Build completed.'
         }
     }
