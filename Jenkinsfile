@@ -19,11 +19,8 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    try {
+                    catchError(buildResult: 'UNSTABLE', message: 'Tests failed') {
                         sh 'mvn test'
-                    } catch (Exception e) {
-                        echo "Tests failed: ${e.getMessage()}"
-                        currentBuild.result = 'UNSTABLE'
                     }
                 }
             }
